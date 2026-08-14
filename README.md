@@ -11,27 +11,32 @@ npm run dev
 
 Откройте [http://localhost:3000](http://localhost:3000).
 
-## Деплой на Vercel
+## Деплой на Vercel + Supabase
 
-1. Загрузите репозиторий на GitHub
-2. Импортируйте проект в [Vercel](https://vercel.com)
-3. Добавьте переменные окружения из `.env.example`
-4. Deploy
+### 1. Vercel
+1. Импортируйте репозиторий на [vercel.com](https://vercel.com)
+2. Deploy — сайт сразу работает через localStorage
 
-## Supabase (авторизация + рецепты)
+### 2. Supabase (через интеграцию Vercel)
+1. Vercel → Project → **Storage** → **Connect Supabase**
+2. Vercel автоматически добавит переменные (`NEXT_PUBLIC_SUPABASE_URL`, `POSTGRES_PRISMA_URL` и др.) — это нормально
 
-1. Создайте проект на [supabase.com](https://supabase.com)
-2. Скопируйте URL и anon key в `.env.local`
-3. Скопируйте connection strings в `DATABASE_URL` и `DIRECT_URL`
-4. Выполните миграции:
+### 3. Создать таблицы (один раз, локально)
+Создайте `.env.local` с ключами из Supabase (Settings → Database → Connection string):
 
 ```bash
-npx prisma migrate dev --name init
+cp .env.example .env.local
+npm install
+npx prisma migrate deploy
 npm run db:seed
 ```
 
-5. В Supabase Dashboard включите Email и Google OAuth
-6. Добавьте redirect URL: `https://your-domain.com/auth/callback`
+Затем `git push` — Vercel пересоберёт проект.
+
+### 4. Auth redirect
+Supabase → Authentication → URL Configuration:
+- **Site URL:** `https://ваш-проект.vercel.app`
+- **Redirect URLs:** `https://ваш-проект.vercel.app/auth/callback`
 
 ## Без Supabase
 
