@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo } from "react";
-import { formatMenuDate, getTodayMenuDay, menuDays } from "@/data/menu";
+import { formatMenuDate, formatPlanDateRange, getTodayMenuDay, menuDays } from "@/data/menu";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { EMPTY_MENU_PROGRESS } from "@/lib/storage-defaults";
 import { cn } from "@/lib/cn";
@@ -38,7 +38,7 @@ export function MenuCalendar() {
         <SectionTitle
           emoji="📅"
           title="Меню на 30 дней"
-          subtitle={`15 августа — 13 сентября 2026 · выполнено ${completedCount} из ${menuDays.length} дней`}
+          subtitle={`${formatPlanDateRange()} · выполнено ${completedCount} из ${menuDays.length} дней`}
         />
         {today && (
           <Card className="mb-8 border-[var(--accent)] bg-[var(--accent)]/5">

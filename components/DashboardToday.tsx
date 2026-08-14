@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatMenuDate, getTodayMenuDay } from "@/data/menu";
+import { formatMenuDate, formatPlanDateRange, getTodayMenuDay } from "@/data/menu";
 import { Card } from "@/components/ui";
 
 export function DashboardToday() {
@@ -11,7 +11,7 @@ export function DashboardToday() {
         <div className="mx-auto max-w-6xl">
           <Card>
             <p className="text-[var(--muted)]">
-              Сегодня вне диапазона плана (15 августа — 13 сентября 2026).
+              Сегодня вне диапазона плана ({formatPlanDateRange()}).
             </p>
             <Link href="/menu" className="mt-3 inline-block text-[var(--accent-dark)] underline">
               Открыть меню на 30 дней
