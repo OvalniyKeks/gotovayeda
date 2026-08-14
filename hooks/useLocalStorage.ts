@@ -4,14 +4,33 @@ import { useCallback, useSyncExternalStore } from "react";
 
 const STORAGE_EVENT = "gotovayeda-storage";
 
-function readValue<T>(key: string, initialValue: T): T {
+const snapshotCache = new Map<string, { raw: string; value: unknown }>();
+
+function readSnapshot<T>(key: string, initialValue: T): T {
   if (typeof window === "undefined") return initialValue;
+
   try {
-    const stored = window.localStorage.getItem(key);
-    return stored ? (JSON.parse(stored) as T) : initialValue;
+    const raw = window.localStorage.getItem(key);
+    const rawStr = raw ?? "";
+    const cached = snapshotCache.get(key);
+
+    if (cached?.raw === rawStr) {
+      return cached.value as T;
+    }
+
+    const value = raw ? (JSON.parse(raw) as T) : initialValue;
+    snapshotCache.set(key, { raw: rawStr, value });
+    return value;
   } catch {
     return initialValue;
   }
+}
+
+function writeSnapshot<T>(key: string, value: T): void {
+  const rawStr = JSON.stringify(value);
+  window.localStorage.setItem(key, rawStr);
+  snapshotCache.set(key, { raw: rawStr, value });
+  window.dispatchEvent(new Event(STORAGE_EVENT));
 }
 
 export function useLocalStorage<T>(key: string, initialValue: T) {
@@ -26,23 +45,20 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
   }, []);
 
   const getSnapshot = useCallback(
-    () => readValue(key, initialValue),
+    () => readSnapshot(key, initialValue),
     [key, initialValue]
   );
 
-  const value = useSyncExternalStore(
-    subscribe,
-    getSnapshot,
-    () => initialValue
-  );
+  const getServerSnapshot = useCallback(() => initialValue, [initialValue]);
+
+  const value = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   const setValue = useCallback(
     (next: T | ((prev: T) => T)) => {
-      const current = readValue(key, initialValue);
+      const current = readSnapshot(key, initialValue);
       const resolved =
         typeof next === "function" ? (next as (prev: T) => T)(current) : next;
-      window.localStorage.setItem(key, JSON.stringify(resolved));
-      window.dispatchEvent(new Event(STORAGE_EVENT));
+      writeSnapshot(key, resolved);
     },
     [key, initialValue]
   );

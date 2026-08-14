@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo } from "react";
 import { formatMenuDate, getTodayMenuDay, menuDays } from "@/data/menu";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { EMPTY_MENU_PROGRESS } from "@/lib/storage-defaults";
 import { cn } from "@/lib/cn";
 import { Card, SectionTitle } from "@/components/ui";
 
@@ -16,7 +17,10 @@ const mealColors = {
 };
 
 export function MenuCalendar() {
-  const [progress, setProgress] = useLocalStorage<MenuProgress>("gotovayeda-menu", {});
+  const [progress, setProgress] = useLocalStorage<MenuProgress>(
+    "gotovayeda-menu",
+    EMPTY_MENU_PROGRESS
+  );
   const today = getTodayMenuDay();
 
   const toggleDay = (day: number) => {

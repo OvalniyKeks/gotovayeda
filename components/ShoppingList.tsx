@@ -3,12 +3,16 @@
 import { useMemo } from "react";
 import { allShoppingItems, shoppingCategories, shoppingTips } from "@/data/shopping";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { EMPTY_SHOPPING_STATE } from "@/lib/storage-defaults";
 import { Card, ProgressBar, SectionTitle } from "@/components/ui";
 
 type ShoppingState = Record<string, boolean>;
 
 export function ShoppingList() {
-  const [checked, setChecked] = useLocalStorage<ShoppingState>("gotovayeda-shopping", {});
+  const [checked, setChecked] = useLocalStorage<ShoppingState>(
+    "gotovayeda-shopping",
+    EMPTY_SHOPPING_STATE
+  );
 
   const purchasableItems = allShoppingItems.filter((i) => i.note !== "Не покупаем");
   const checkedCount = purchasableItems.filter((i) => checked[i.id]).length;
