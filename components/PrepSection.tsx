@@ -4,7 +4,7 @@ import { Card, SectionTitle } from "@/components/ui";
 export function PrepSection() {
   return (
     <>
-      <section id="prep" className="scroll-mt-24 px-4 py-16 md:px-6">
+      <section className="px-4 py-16 md:px-6">
         <div className="mx-auto max-w-6xl">
           <SectionTitle
             emoji="❄️"
@@ -45,7 +45,7 @@ export function PrepSection() {
           </div>
         </div>
       </section>
-      <section id="rules" className="scroll-mt-24 px-4 py-16 md:px-6">
+      <section className="px-4 py-16 md:px-6">
         <div className="mx-auto max-w-6xl">
           <SectionTitle emoji="📋" title="Правила месяца" />
           <div className="grid gap-3 md:grid-cols-2">

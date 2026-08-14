@@ -29,7 +29,7 @@ export function MenuCalendar() {
   );
 
   return (
-    <section id="menu" className="scroll-mt-24 bg-[var(--cream-dark)] px-4 py-16 md:px-6">
+    <section className="bg-[var(--cream-dark)] px-4 py-16 md:px-6">
       <div className="mx-auto max-w-6xl">
         <SectionTitle
           emoji="📅"

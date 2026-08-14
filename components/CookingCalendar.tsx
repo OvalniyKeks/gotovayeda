@@ -27,7 +27,7 @@ function isToday(dateStr: string): boolean {
 
 export function CookingCalendar() {
   return (
-    <section id="cooking" className="scroll-mt-24 px-4 py-16 md:px-6">
+    <section className="px-4 py-16 md:px-6">
       <div className="mx-auto max-w-6xl">
         <SectionTitle
           emoji="👨‍🍳"
