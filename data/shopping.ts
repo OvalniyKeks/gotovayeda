@@ -94,138 +94,224 @@ export const shoppingItemById = Object.fromEntries(
   allShoppingItems.map((item) => [item.id, item])
 ) as Record<string, ShoppingItem>;
 
-export interface ShoppingWaveItem {
+export type ShelfLife = "pantry" | "freezer" | "fresh" | "veg";
+
+export interface ShoppingListItem {
   itemId: string;
   quantity: string;
   note?: string;
 }
 
-export interface ShoppingWave {
-  id: string;
+export interface PantrySetup {
   date: string;
   label: string;
   budgetHint: string;
-  items: ShoppingWaveItem[];
-  afterShopping?: string[];
+  items: ShoppingListItem[];
+  afterShopping: string[];
 }
 
-export const shoppingWaves: ShoppingWave[] = [
+export interface FreezerBatch {
+  date: string;
+  label: string;
+  budgetHint: string;
+  items: ShoppingListItem[];
+  afterShopping: string[];
+}
+
+export const pantrySetup: PantrySetup = {
+  date: "2026-08-16",
+  label: "Кладовая — один раз 16 августа",
+  budgetHint: "≈ 4–5 000 ₽",
+  items: [
+    { itemId: "rice", quantity: "3 кг" },
+    { itemId: "buckwheat", quantity: "2 кг" },
+    { itemId: "oats", quantity: "2 кг" },
+    { itemId: "barley", quantity: "1 кг" },
+    { itemId: "flour", quantity: "2 кг" },
+    { itemId: "sunflower-oil", quantity: "2 л" },
+    { itemId: "butter", quantity: "400 г" },
+    { itemId: "tomato-paste", quantity: "3 банки" },
+    { itemId: "sugar", quantity: "2 кг" },
+    { itemId: "spices", quantity: "комплект" },
+    { itemId: "cinnamon", quantity: "1 пачка" },
+    { itemId: "tea", quantity: "1 уп." },
+    { itemId: "cocoa", quantity: "1 уп." },
+    { itemId: "mayo", quantity: "1 уп." },
+    { itemId: "frozen-veg", quantity: "4 кг" },
+    { itemId: "garlic", quantity: "300 г" },
+  ],
+  afterShopping: [
+    "Проверить запасы, отложить 5 кг макарон (уже есть дома)",
+    "Крупы и бакалею хранить в сухом месте — хватит на весь месяц",
+  ],
+};
+
+export const freezerBatch: FreezerBatch = {
+  date: "2026-08-16",
+  label: "Морозилка — один раз 16 августа",
+  budgetHint: "≈ 3–4 000 ₽",
+  items: [
+    { itemId: "chicken", quantity: "6 кг", note: "6 пакетов по 1 кг" },
+    { itemId: "mince", quantity: "3 кг", note: "6 пакетов по 0,5 кг" },
+    { itemId: "fish", quantity: "2 кг" },
+    { itemId: "liver", quantity: "2 кг" },
+  ],
+  afterShopping: [
+    "Сразу разделить мясо и фарш по пакетам и заморозить",
+    "Освободить место в морозилке",
+    "Доставать порции за день до готовки",
+  ],
+};
+
+export const freshShoppingTemplate = {
+  label: "Свежее — шаблон на 3 дня",
+  budgetHint: "≈ 1,5–2,5 тыс. ₽ за поход",
+  items: [
+    { itemId: "milk", quantity: "1,5–2 л" },
+    { itemId: "bread", quantity: "1–2 шт." },
+    { itemId: "eggs", quantity: "6–10 шт." },
+    { itemId: "cottage", quantity: "1 × 400 г", note: "если сырники/запеканка в меню" },
+    { itemId: "cheese", quantity: "150–200 г", note: "по необходимости" },
+    { itemId: "bananas", quantity: "0,5–1 кг" },
+    { itemId: "apples", quantity: "0,5–1 кг" },
+    { itemId: "cucumber", quantity: "0,5 кг", note: "если нужен салат" },
+    { itemId: "tomato", quantity: "0,5 кг", note: "если нужен салат" },
+    { itemId: "sour-cream", quantity: "1 × 400 г", note: "если суп/борщ на неделе" },
+  ],
+};
+
+export interface FreshShoppingRun {
+  id: string;
+  date: string;
+  label: string;
+  menuHint: string;
+  extraItems: ShoppingListItem[];
+}
+
+export const freshShoppingRuns: FreshShoppingRun[] = [
   {
-    id: "wave-1",
+    id: "fresh-run-16",
     date: "2026-08-16",
-    label: "16 августа — большая стартовая закупка",
-    budgetHint: "≈ 12–14 000 ₽",
-    items: [
-      { itemId: "chicken", quantity: "4 кг", note: "2 кг в морозилку" },
-      { itemId: "mince", quantity: "2 кг", note: "1 кг в морозилку" },
-      { itemId: "liver", quantity: "1 кг" },
-      { itemId: "fish", quantity: "1 кг", note: "в морозилку" },
-      { itemId: "eggs", quantity: "40 шт." },
-      { itemId: "cottage", quantity: "4 × 400 г" },
-      { itemId: "milk", quantity: "4 л" },
-      { itemId: "cheese", quantity: "500 г" },
-      { itemId: "rice", quantity: "2 кг" },
-      { itemId: "buckwheat", quantity: "1,5 кг" },
-      { itemId: "oats", quantity: "1 кг" },
-      { itemId: "barley", quantity: "0,5 кг" },
-      { itemId: "flour", quantity: "2 кг" },
-      { itemId: "bread", quantity: "2 шт." },
-      { itemId: "potato", quantity: "4 кг" },
-      { itemId: "onion", quantity: "2 кг" },
-      { itemId: "carrot", quantity: "2 кг" },
-      { itemId: "cabbage", quantity: "2 кг" },
-      { itemId: "beet", quantity: "1 кг" },
-      { itemId: "cucumber", quantity: "0,5 кг" },
-      { itemId: "tomato", quantity: "0,5 кг" },
-      { itemId: "frozen-veg", quantity: "2 кг" },
-      { itemId: "garlic", quantity: "150 г" },
-      { itemId: "apples", quantity: "3 кг" },
-      { itemId: "bananas", quantity: "2 кг" },
-      { itemId: "sunflower-oil", quantity: "2 л" },
-      { itemId: "butter", quantity: "400 г" },
-      { itemId: "tomato-paste", quantity: "3 банки" },
-      { itemId: "sour-cream", quantity: "2 × 400 г" },
-      { itemId: "mayo", quantity: "1 уп." },
-      { itemId: "sugar", quantity: "2 кг" },
-      { itemId: "spices", quantity: "комплект" },
-      { itemId: "cinnamon", quantity: "1 пачка" },
-      { itemId: "tea", quantity: "1 уп." },
-      { itemId: "cocoa", quantity: "1 уп." },
-    ],
-    afterShopping: [
-      "Мясо и фарш разделить по пакетам 0,5–1 кг и заморозить",
-      "Освободить место в морозилке",
-      "Проверить запасы, отложить 5 кг макарон (уже есть дома)",
+    label: "16 августа — свежее на 3 дня",
+    menuHint: "Старт меню 17 авг: блины, суп, курица",
+    extraItems: [
+      { itemId: "potato", quantity: "2 кг", note: "для супа и гарнира" },
+      { itemId: "onion", quantity: "0,5 кг" },
+      { itemId: "carrot", quantity: "0,5 кг" },
+      { itemId: "apples", quantity: "1,5 кг", note: "для начинки и завтраков" },
+      { itemId: "eggs", quantity: "10 шт." },
+      { itemId: "milk", quantity: "1,5 л" },
+      { itemId: "bread", quantity: "1 шт." },
+      { itemId: "cottage", quantity: "1 × 400 г" },
     ],
   },
   {
-    id: "wave-2",
-    date: "2026-08-24",
-    label: "24 августа — свежая закупка",
-    budgetHint: "≈ 3–4 000 ₽",
-    items: [
-      { itemId: "chicken", quantity: "1,5 кг", note: "или из морозилки" },
-      { itemId: "mince", quantity: "1 кг" },
-      { itemId: "eggs", quantity: "20 шт." },
-      { itemId: "cottage", quantity: "2 × 400 г" },
-      { itemId: "milk", quantity: "2 л" },
-      { itemId: "cheese", quantity: "300 г" },
-      { itemId: "bread", quantity: "4 шт." },
-      { itemId: "cabbage", quantity: "1 кг" },
-      { itemId: "cucumber", quantity: "1 кг" },
-      { itemId: "tomato", quantity: "1 кг" },
-      { itemId: "apples", quantity: "1,5 кг" },
-      { itemId: "bananas", quantity: "1,5 кг" },
+    id: "fresh-run-19",
+    date: "2026-08-19",
+    label: "19 августа — свежее на 3 дня",
+    menuHint: "Борщ 20–21 авг, сырники, омлеты",
+    extraItems: [
+      { itemId: "beet", quantity: "1 кг", note: "для борща" },
+      { itemId: "cabbage", quantity: "1 кг", note: "для борща" },
+      { itemId: "sour-cream", quantity: "1 × 400 г" },
+      { itemId: "cottage", quantity: "1 × 400 г" },
+    ],
+  },
+  {
+    id: "fresh-run-22",
+    date: "2026-08-22",
+    label: "22 августа — свежее на 3 дня",
+    menuHint: "Плов 22–23 авг, шаурма",
+    extraItems: [
+      { itemId: "carrot", quantity: "0,5 кг", note: "для плова" },
+      { itemId: "onion", quantity: "0,5 кг", note: "для плова" },
+      { itemId: "cucumber", quantity: "0,5 кг", note: "для шаурмы" },
+    ],
+  },
+  {
+    id: "fresh-run-25",
+    date: "2026-08-25",
+    label: "25 августа — свежее на 3 дня",
+    menuHint: "Запеканка 25–26 авг, сырники",
+    extraItems: [
+      { itemId: "potato", quantity: "1,5 кг", note: "для запеканки" },
+      { itemId: "cottage", quantity: "1 × 400 г" },
+    ],
+  },
+  {
+    id: "fresh-run-28",
+    date: "2026-08-28",
+    label: "28 августа — свежее на 3 дня",
+    menuHint: "Щи 28–29 авг",
+    extraItems: [
+      { itemId: "cabbage", quantity: "1 кг", note: "для щей" },
       { itemId: "sour-cream", quantity: "1 × 400 г" },
     ],
-    afterShopping: [
-      "Достать мясо и котлеты из морозилки по плану на неделю",
+  },
+  {
+    id: "fresh-run-31",
+    date: "2026-08-31",
+    label: "31 августа — свежее на 3 дня",
+    menuHint: "Плов и пицца из запасов — минимум свежего",
+    extraItems: [
+      { itemId: "milk", quantity: "1 л" },
+      { itemId: "bread", quantity: "1 шт." },
+      { itemId: "eggs", quantity: "6 шт." },
     ],
   },
   {
-    id: "wave-3",
-    date: "2026-09-04",
-    label: "4 сентября — точечная закупка",
-    budgetHint: "≈ 1,5–2 000 ₽",
-    items: [
-      { itemId: "eggs", quantity: "10–15 шт.", note: "если заканчиваются" },
-      { itemId: "milk", quantity: "1–2 л", note: "по остаткам" },
-      { itemId: "bread", quantity: "2 шт." },
-      { itemId: "cottage", quantity: "1 × 400 г", note: "при необходимости" },
-      { itemId: "cucumber", quantity: "0,5 кг", note: "1–2 овоща по выбору" },
-      { itemId: "tomato", quantity: "0,5 кг", note: "1–2 овоща по выбору" },
-      { itemId: "apples", quantity: "1 кг", note: "или бананы" },
-    ],
-    afterShopping: [
-      "Проверить остатки круп, мяса и заморозки перед покупкой",
-      "Не тратить резервный бюджет без необходимости",
+    id: "fresh-run-03",
+    date: "2026-09-03",
+    label: "3 сентября — свежее на 3 дня",
+    menuHint: "Овощное рагу, борщ",
+    extraItems: [
+      { itemId: "tomato", quantity: "0,5 кг", note: "для рагу" },
+      { itemId: "cucumber", quantity: "0,5 кг" },
+      { itemId: "cottage", quantity: "1 × 400 г", note: "запеканка 2 сен" },
     ],
   },
   {
-    id: "wave-4",
-    date: "2026-09-07",
-    label: "7 сентября — свежая закупка",
-    budgetHint: "≈ 2–3 000 ₽",
-    items: [
-      { itemId: "bread", quantity: "3 шт." },
-      { itemId: "milk", quantity: "2 л" },
-      { itemId: "eggs", quantity: "15 шт." },
-      { itemId: "cottage", quantity: "2 × 400 г" },
-      { itemId: "cucumber", quantity: "1 кг" },
-      { itemId: "tomato", quantity: "1 кг" },
-      { itemId: "bananas", quantity: "1,5 кг" },
-      { itemId: "apples", quantity: "1,5 кг" },
+    id: "fresh-run-06",
+    date: "2026-09-06",
+    label: "6 сентября — свежее на 3 дня",
+    menuHint: "Суп на 6–8 сен, шаурма",
+    extraItems: [
+      { itemId: "onion", quantity: "0,3 кг" },
+      { itemId: "carrot", quantity: "0,3 кг" },
+      { itemId: "potato", quantity: "0,5 кг" },
     ],
-    afterShopping: [
-      "Сразу после закупки — большая готовка: котлеты, курица, гарнир",
+  },
+  {
+    id: "fresh-run-09",
+    date: "2026-09-09",
+    label: "9 сентября — свежее на 3 дня",
+    menuHint: "Щи, курица с картофелем",
+    extraItems: [
+      { itemId: "potato", quantity: "1 кг" },
+      { itemId: "cottage", quantity: "1 × 400 г" },
+    ],
+  },
+  {
+    id: "fresh-run-12",
+    date: "2026-09-12",
+    label: "12 сентября — свежее на 3 дня",
+    menuHint: "Финальная неделя — по остаткам, минимум покупок",
+    extraItems: [
+      { itemId: "milk", quantity: "1 л" },
+      { itemId: "bread", quantity: "1 шт." },
+      { itemId: "eggs", quantity: "6 шт." },
     ],
   },
 ];
 
+export const freshRunById = Object.fromEntries(
+  freshShoppingRuns.map((run) => [run.id, run])
+) as Record<string, FreshShoppingRun>;
+
 export const shoppingTips = [
-  "4 волны закупок на месяц — даты и списки см. блок «Когда покупать» ниже или календарь готовки.",
-  "16 августа — большая стартовая закупка на 7–10 дней + готовка в тот же день.",
-  "24 августа и 7 сентября — свежие овощи, фрукты, хлеб и молочка.",
-  "4 сентября — точечная закупка только по остаткам.",
-  "Мясо сразу разделить по пакетам на 0,5–1 кг и заморозить.",
+  "Кладовая и морозилка — один раз 16 августа. Свежее — каждые 3 дня небольшими партиями.",
+  "Даты свежих закупок можно сдвинуть на ±1 день — главное не покупать молоко и хлеб «на две недели».",
+  "Мясо из морозилки — доставать порцию за день до готовки.",
+  "Овощи для супа/борща — только под ближайшую готовку (2–3 дня супа).",
+  "Общий чеклист ниже — на весь месяц; отмечайте по мере покупок.",
 ];
