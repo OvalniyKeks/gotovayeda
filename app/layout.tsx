@@ -1,17 +1,19 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+import { Cormorant_Garamond, Nunito } from "next/font/google";
 import { Header } from "@/components/Header";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import "./globals.css";
 
-const playfair = Playfair_Display({
+const cormorant = Cormorant_Garamond({
   subsets: ["latin", "cyrillic"],
-  variable: "--font-playfair",
+  variable: "--font-cormorant",
+  weight: ["500", "600", "700"],
 });
 
-const inter = Inter({
+const nunito = Nunito({
   subsets: ["latin", "cyrillic"],
-  variable: "--font-inter",
+  variable: "--font-nunito",
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -27,7 +29,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru" className={`${playfair.variable} ${inter.variable} h-full`}>
+    <html lang="ru" className={`${cormorant.variable} ${nunito.variable} h-full`}>
       <body className="min-h-full bg-[var(--background)] font-sans text-[var(--foreground)] antialiased pb-20 md:pb-0">
         <Header />
         <main>{children}</main>
