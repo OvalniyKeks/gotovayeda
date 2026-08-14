@@ -35,7 +35,7 @@ export function Header() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-6">
           <Link
             href="/"
-            className="font-display text-xl font-bold text-[var(--accent-dark)]"
+            className="font-display text-xl font-semibold tracking-wide text-[var(--accent-dark)]"
           >
             GOTOVAYEDA
           </Link>

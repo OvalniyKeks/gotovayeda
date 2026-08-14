@@ -12,7 +12,7 @@ export function Hero() {
         <p className="mb-3 text-sm font-medium uppercase tracking-widest text-[var(--accent)]">
           План питания · 2 человека
         </p>
-        <h1 className="font-display max-w-3xl text-4xl font-bold leading-tight text-[var(--foreground)] md:text-6xl">
+        <h1 className="font-display max-w-3xl text-4xl font-semibold leading-tight text-[var(--foreground)] md:text-6xl">
           30 дней домашней еды за {FOOD_BUDGET_TOTAL.toLocaleString("ru-RU")} ₽
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-[var(--muted)]">{planGoal}</p>
