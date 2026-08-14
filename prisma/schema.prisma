@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String   @id
+  email         String   @unique
+  budget        Json?
+  shoppingState Json?
+  menuProgress  Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  recipes       Recipe[]
+}
+
+model Dish {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  name      String
+  category  String
+  emoji     String?
+  isDefault Boolean  @default(true)
+  recipes   Recipe[]
+}
+
+model Recipe {
+  id          String   @id @default(cuid())
+  dishId      String
+  dish        Dish     @relation(fields: [dishId], references: [id], onDelete: Cascade)
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  ingredients Json
+  steps       Json
+  prepTime    Int?
+  cookTime    Int?
+  servings    Int      @default(2)
+  tips        String?
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([dishId])
+  @@index([userId])
+}
