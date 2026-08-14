@@ -88,11 +88,144 @@ export const shoppingCategories: ShoppingCategory[] = [
   },
 ];
 
-export const shoppingTips = [
-  "Первая закупка — 16 августа (воскресенье): мясо, крупы, яйца, молочка на 7–10 дней, заморозка, картофель, лук, морковь, яблоки и продукты для выпечки.",
-  "Вторая закупка: свежие овощи, фрукты, хлеб и молочка.",
-  "Третья: повтор свежих продуктов.",
-  "Мясо сразу разделить по пакетам на 0,5–1 кг и заморозить.",
+export const allShoppingItems = shoppingCategories.flatMap((c) => c.items);
+
+export const shoppingItemById = Object.fromEntries(
+  allShoppingItems.map((item) => [item.id, item])
+) as Record<string, ShoppingItem>;
+
+export interface ShoppingWaveItem {
+  itemId: string;
+  quantity: string;
+  note?: string;
+}
+
+export interface ShoppingWave {
+  id: string;
+  date: string;
+  label: string;
+  budgetHint: string;
+  items: ShoppingWaveItem[];
+  afterShopping?: string[];
+}
+
+export const shoppingWaves: ShoppingWave[] = [
+  {
+    id: "wave-1",
+    date: "2026-08-16",
+    label: "16 августа — большая стартовая закупка",
+    budgetHint: "≈ 12–14 000 ₽",
+    items: [
+      { itemId: "chicken", quantity: "4 кг", note: "2 кг в морозилку" },
+      { itemId: "mince", quantity: "2 кг", note: "1 кг в морозилку" },
+      { itemId: "liver", quantity: "1 кг" },
+      { itemId: "fish", quantity: "1 кг", note: "в морозилку" },
+      { itemId: "eggs", quantity: "40 шт." },
+      { itemId: "cottage", quantity: "4 × 400 г" },
+      { itemId: "milk", quantity: "4 л" },
+      { itemId: "cheese", quantity: "500 г" },
+      { itemId: "rice", quantity: "2 кг" },
+      { itemId: "buckwheat", quantity: "1,5 кг" },
+      { itemId: "oats", quantity: "1 кг" },
+      { itemId: "barley", quantity: "0,5 кг" },
+      { itemId: "flour", quantity: "2 кг" },
+      { itemId: "bread", quantity: "2 шт." },
+      { itemId: "potato", quantity: "4 кг" },
+      { itemId: "onion", quantity: "2 кг" },
+      { itemId: "carrot", quantity: "2 кг" },
+      { itemId: "cabbage", quantity: "2 кг" },
+      { itemId: "beet", quantity: "1 кг" },
+      { itemId: "cucumber", quantity: "0,5 кг" },
+      { itemId: "tomato", quantity: "0,5 кг" },
+      { itemId: "frozen-veg", quantity: "2 кг" },
+      { itemId: "garlic", quantity: "150 г" },
+      { itemId: "apples", quantity: "3 кг" },
+      { itemId: "bananas", quantity: "2 кг" },
+      { itemId: "sunflower-oil", quantity: "2 л" },
+      { itemId: "butter", quantity: "400 г" },
+      { itemId: "tomato-paste", quantity: "3 банки" },
+      { itemId: "sour-cream", quantity: "2 × 400 г" },
+      { itemId: "mayo", quantity: "1 уп." },
+      { itemId: "sugar", quantity: "2 кг" },
+      { itemId: "spices", quantity: "комплект" },
+      { itemId: "cinnamon", quantity: "1 пачка" },
+      { itemId: "tea", quantity: "1 уп." },
+      { itemId: "cocoa", quantity: "1 уп." },
+    ],
+    afterShopping: [
+      "Мясо и фарш разделить по пакетам 0,5–1 кг и заморозить",
+      "Освободить место в морозилке",
+      "Проверить запасы, отложить 5 кг макарон (уже есть дома)",
+    ],
+  },
+  {
+    id: "wave-2",
+    date: "2026-08-24",
+    label: "24 августа — свежая закупка",
+    budgetHint: "≈ 3–4 000 ₽",
+    items: [
+      { itemId: "chicken", quantity: "1,5 кг", note: "или из морозилки" },
+      { itemId: "mince", quantity: "1 кг" },
+      { itemId: "eggs", quantity: "20 шт." },
+      { itemId: "cottage", quantity: "2 × 400 г" },
+      { itemId: "milk", quantity: "2 л" },
+      { itemId: "cheese", quantity: "300 г" },
+      { itemId: "bread", quantity: "4 шт." },
+      { itemId: "cabbage", quantity: "1 кг" },
+      { itemId: "cucumber", quantity: "1 кг" },
+      { itemId: "tomato", quantity: "1 кг" },
+      { itemId: "apples", quantity: "1,5 кг" },
+      { itemId: "bananas", quantity: "1,5 кг" },
+      { itemId: "sour-cream", quantity: "1 × 400 г" },
+    ],
+    afterShopping: [
+      "Достать мясо и котлеты из морозилки по плану на неделю",
+    ],
+  },
+  {
+    id: "wave-3",
+    date: "2026-09-04",
+    label: "4 сентября — точечная закупка",
+    budgetHint: "≈ 1,5–2 000 ₽",
+    items: [
+      { itemId: "eggs", quantity: "10–15 шт.", note: "если заканчиваются" },
+      { itemId: "milk", quantity: "1–2 л", note: "по остаткам" },
+      { itemId: "bread", quantity: "2 шт." },
+      { itemId: "cottage", quantity: "1 × 400 г", note: "при необходимости" },
+      { itemId: "cucumber", quantity: "0,5 кг", note: "1–2 овоща по выбору" },
+      { itemId: "tomato", quantity: "0,5 кг", note: "1–2 овоща по выбору" },
+      { itemId: "apples", quantity: "1 кг", note: "или бананы" },
+    ],
+    afterShopping: [
+      "Проверить остатки круп, мяса и заморозки перед покупкой",
+      "Не тратить резервный бюджет без необходимости",
+    ],
+  },
+  {
+    id: "wave-4",
+    date: "2026-09-07",
+    label: "7 сентября — свежая закупка",
+    budgetHint: "≈ 2–3 000 ₽",
+    items: [
+      { itemId: "bread", quantity: "3 шт." },
+      { itemId: "milk", quantity: "2 л" },
+      { itemId: "eggs", quantity: "15 шт." },
+      { itemId: "cottage", quantity: "2 × 400 г" },
+      { itemId: "cucumber", quantity: "1 кг" },
+      { itemId: "tomato", quantity: "1 кг" },
+      { itemId: "bananas", quantity: "1,5 кг" },
+      { itemId: "apples", quantity: "1,5 кг" },
+    ],
+    afterShopping: [
+      "Сразу после закупки — большая готовка: котлеты, курица, гарнир",
+    ],
+  },
 ];
 
-export const allShoppingItems = shoppingCategories.flatMap((c) => c.items);
+export const shoppingTips = [
+  "4 волны закупок на месяц — даты и списки см. блок «Когда покупать» ниже или календарь готовки.",
+  "16 августа — большая стартовая закупка на 7–10 дней + готовка в тот же день.",
+  "24 августа и 7 сентября — свежие овощи, фрукты, хлеб и молочка.",
+  "4 сентября — точечная закупка только по остаткам.",
+  "Мясо сразу разделить по пакетам на 0,5–1 кг и заморозить.",
+];

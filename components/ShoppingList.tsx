@@ -1,7 +1,13 @@
 "use client";
 
 import { useMemo } from "react";
-import { allShoppingItems, shoppingCategories, shoppingTips } from "@/data/shopping";
+import {
+  allShoppingItems,
+  shoppingCategories,
+  shoppingItemById,
+  shoppingTips,
+  shoppingWaves,
+} from "@/data/shopping";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { EMPTY_SHOPPING_STATE } from "@/lib/storage-defaults";
 import { Card, ProgressBar, SectionTitle } from "@/components/ui";
@@ -31,6 +37,48 @@ export function ShoppingList() {
           title="Список закупки"
           subtitle="Отмечайте купленное — прогресс сохраняется автоматически."
         />
+
+        <div className="mb-8 space-y-4">
+          <h3 className="font-display text-xl font-semibold">Когда покупать</h3>
+          {shoppingWaves.map((wave) => (
+            <Card key={wave.id} className="border-[var(--amber)]/30 bg-[var(--amber)]/5">
+              <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
+                <h4 className="font-display text-lg font-semibold">{wave.label}</h4>
+                <span className="text-sm text-[var(--muted)]">{wave.budgetHint}</span>
+              </div>
+              <ul className="space-y-1 text-sm text-[var(--muted)]">
+                {wave.items.map((item) => {
+                  const product = shoppingItemById[item.itemId];
+                  return (
+                    <li key={`${wave.id}-${item.itemId}`} className="flex gap-2">
+                      <span>•</span>
+                      <span>
+                        {product?.name ?? item.itemId}: {item.quantity}
+                        {item.note ? ` (${item.note})` : ""}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+              {wave.afterShopping && wave.afterShopping.length > 0 && (
+                <div className="mt-3 border-t border-[var(--border)] pt-3">
+                  <p className="mb-1 text-xs font-medium uppercase tracking-wide text-[var(--muted)]">
+                    После закупки
+                  </p>
+                  <ul className="space-y-1 text-sm text-[var(--muted)]">
+                    {wave.afterShopping.map((tip) => (
+                      <li key={tip} className="flex gap-2">
+                        <span>→</span>
+                        <span>{tip}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </Card>
+          ))}
+        </div>
+
         <Card className="mb-8">
           <div className="mb-2 flex items-center justify-between">
             <span className="font-medium">Прогресс закупки</span>
