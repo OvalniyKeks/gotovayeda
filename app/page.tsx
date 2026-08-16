@@ -1,7 +1,7 @@
 import { Hero } from "@/components/Hero";
 import { DashboardToday } from "@/components/DashboardToday";
 import { QuickLinks } from "@/components/QuickLinks";
-import { SyncOnLogin } from "@/components/SyncOnLogin";
+import { SyncManager } from "@/components/SyncManager";
 
 export const metadata = {
   title: "GOTOVAYEDA — План питания на 30 дней",
@@ -11,7 +11,7 @@ export const metadata = {
 export default function HomePage() {
   return (
     <>
-      <SyncOnLogin />
+      <SyncManager />
       <Hero />
       <DashboardToday />
       <QuickLinks />

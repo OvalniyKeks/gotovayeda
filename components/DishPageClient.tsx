@@ -19,7 +19,19 @@ export function DishPageClient({
 }: DishPageClientProps) {
   const [isAuthed, setIsAuthed] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
+  const [offline, setOffline] = useState(false);
   const supabaseReady = isSupabaseConfigured();
+
+  useEffect(() => {
+    const updateOnline = () => setOffline(!navigator.onLine);
+    updateOnline();
+    window.addEventListener("online", updateOnline);
+    window.addEventListener("offline", updateOnline);
+    return () => {
+      window.removeEventListener("online", updateOnline);
+      window.removeEventListener("offline", updateOnline);
+    };
+  }, []);
 
   useEffect(() => {
     if (!supabaseReady) return;
@@ -37,7 +49,11 @@ export function DishPageClient({
         </div>
       ))}
 
-      {supabaseReady && isAuthed ? (
+      {offline && supabaseReady ? (
+        <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-center text-sm text-amber-900">
+          Редактирование рецептов доступно только при подключении к сети.
+        </p>
+      ) : supabaseReady && isAuthed ? (
         <>
           {!showEditor && (
             <button

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { Card, SectionTitle } from "@/components/ui";
 
@@ -12,6 +12,18 @@ export default function LoginPage() {
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [offline, setOffline] = useState(false);
+
+  useEffect(() => {
+    const update = () => setOffline(!navigator.onLine);
+    update();
+    window.addEventListener("online", update);
+    window.addEventListener("offline", update);
+    return () => {
+      window.removeEventListener("online", update);
+      window.removeEventListener("offline", update);
+    };
+  }, []);
 
   if (!isSupabaseConfigured()) {
     return (
@@ -73,6 +85,11 @@ export default function LoginPage() {
     <div className="px-4 py-16 md:px-6">
       <div className="mx-auto max-w-md">
         <SectionTitle emoji="🔐" title="Вход" subtitle="Синхронизация бюджета, закупок и рецептов." />
+        {offline && (
+          <p className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+            Вход и синхронизация доступны только при подключении к сети.
+          </p>
+        )}
         <Card>
           <form onSubmit={handleEmailAuth} className="space-y-4">
             <input

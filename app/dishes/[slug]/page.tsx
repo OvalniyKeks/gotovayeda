@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { dishBySlug } from "@/data/dishes";
+import { seedRecipeToData } from "@/lib/offline-recipe";
 import { isDatabaseConfigured, prisma } from "@/lib/prisma";
 import { parseRecipeJson, RecipeData } from "@/lib/recipe-types";
 import { RecipeView } from "@/components/RecipeView";
@@ -21,32 +22,35 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 async function getRecipes(slug: string): Promise<RecipeData[]> {
-  if (!isDatabaseConfigured()) return [];
-
-  try {
-    const dish = await prisma.dish.findUnique({
-      where: { slug },
-      include: {
-        recipes: { orderBy: [{ userId: "asc" }, { createdAt: "desc" }] },
-      },
-    });
-    if (!dish) return [];
-
-    return dish.recipes.map((r) => ({
-      id: r.id,
-      title: r.title,
-      ingredients: parseRecipeJson(r.ingredients),
-      steps: parseRecipeJson(r.steps),
-      prepTime: r.prepTime,
-      cookTime: r.cookTime,
-      servings: r.servings,
-      tips: r.tips,
-      imageUrl: r.imageUrl,
-      userId: r.userId,
-    }));
-  } catch {
-    return [];
+  if (isDatabaseConfigured()) {
+    try {
+      const dish = await prisma.dish.findUnique({
+        where: { slug },
+        include: {
+          recipes: { orderBy: [{ userId: "asc" }, { createdAt: "desc" }] },
+        },
+      });
+      if (dish?.recipes.length) {
+        return dish.recipes.map((r) => ({
+          id: r.id,
+          title: r.title,
+          ingredients: parseRecipeJson(r.ingredients),
+          steps: parseRecipeJson(r.steps),
+          prepTime: r.prepTime,
+          cookTime: r.cookTime,
+          servings: r.servings,
+          tips: r.tips,
+          imageUrl: r.imageUrl,
+          userId: r.userId,
+        }));
+      }
+    } catch {
+      // fall through to seed data
+    }
   }
+
+  const seed = seedRecipeToData(slug);
+  return seed ? [seed] : [];
 }
 
 export default async function DishPage({ params }: PageProps) {
