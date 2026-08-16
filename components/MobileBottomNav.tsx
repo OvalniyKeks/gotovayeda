@@ -15,8 +15,7 @@ export function MobileBottomNav() {
   return (
     <nav
       data-mobile-nav
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-[var(--border)] bg-[var(--background)]/95 backdrop-blur-md md:hidden"
-      style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-[var(--border)] bg-[var(--background)]/95 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))] backdrop-blur-md md:hidden"
     >
       <div className="mx-auto grid max-w-lg grid-cols-5">
         {bottomNavItems.map((item) => {
@@ -26,7 +25,7 @@ export function MobileBottomNav() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex flex-col items-center gap-0.5 px-1 py-2 text-[10px] font-medium transition",
+                "flex flex-col items-center gap-0.5 px-1 py-2.5 text-[10px] font-medium transition",
                 active
                   ? "text-[var(--accent-dark)]"
                   : "text-[var(--muted)] hover:text-[var(--accent-dark)]"

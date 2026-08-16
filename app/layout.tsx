@@ -32,18 +32,19 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#c4704a",
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ru" className={`${rubik.variable} h-full`}>
-      <body className="min-h-full bg-[var(--background)] font-sans text-[var(--foreground)] antialiased pb-20 md:pb-0">
+      <body className="min-h-full bg-[var(--background)] font-sans text-[var(--foreground)] antialiased pb-[calc(5rem+env(safe-area-inset-bottom,0px))] md:pb-0">
         <SerwistProvider swUrl="/serwist/sw.js">
           <OfflineIndicator />
           <Header />
           <main>{children}</main>
           <MobileBottomNav />
-          <footer className="border-t border-[var(--border)] px-4 py-8 pb-24 text-center text-sm text-[var(--muted)] md:pb-8">
+          <footer className="border-t border-[var(--border)] px-4 py-8 pb-[calc(6rem+env(safe-area-inset-bottom,0px))] text-center text-sm text-[var(--muted)] md:pb-8">
             GOTOVAYEDA · План питания на 30 дней · 2 человека · 25 000 ₽
           </footer>
         </SerwistProvider>
